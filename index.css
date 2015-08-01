@@ -1,0 +1,31 @@
+body {
+	background: #24f89a;
+}
+
+.main-container {
+	position : relative;
+	margin: 0 auto;
+	width:400px;
+	border: none;
+	border-radius: 10px;
+	background: rgba(255,255,255,0.5);
+}
+
+#DNA-input-area {
+	width: 100%;
+	height: 200px;
+	padding: 20px;
+	text-align: center;
+	overflow: hidden;
+	resize: none;
+}
+
+#DNA-load-button {
+	width : 360px;
+	height : 50px;
+	margin:20px;
+	border: none;
+	border-radius: 10px;
+	background: #333;
+	color: #eee;
+}
