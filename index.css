@@ -29,3 +29,23 @@ body {
 	background: #333;
 	color: #eee;
 }
+
+#DNA-slider {
+	position: fixed;
+	width:375px;
+	height:30px;
+	bottom:20px;
+	margin-left:12.5px;
+	background: #eee;
+}
+
+.DNA-val {
+	display:inline-block;
+	height:30px;
+	width:50px;
+	text-align:center;
+	line-height:1.7;
+	font-family: Verdana;
+}
+#DNAp3 {
+}
