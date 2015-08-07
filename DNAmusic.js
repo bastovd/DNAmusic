@@ -12,7 +12,7 @@ var currDNAindex = 0;
 var numActiveDNA = 7;
 var DNAlength = 0;
 var DNAhalflength = 0;
-var tempo = 1000;
+var tempo = 500;
 
 var valid_chars = ['A','C','G','T','a','c','g','t','\n','\r'];
 
