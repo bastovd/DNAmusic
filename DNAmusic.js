@@ -1,17 +1,18 @@
-/*var A_sound = loadAudio("A_sound.uri");
-var C_sound = loadAudio("C_sound.uri");
-var G_sound = loadAudio("G_sound.uri");
-var T_sound = loadAudio("T_sound.uri");
-var a_sound = loadAudio("a_sound.uri");
-var c_sound = loadAudio("c_sound.uri");
-var g_sound = loadAudio("g_sound.uri");
-var t_sound = loadAudio("t_sound.uri");*/
+var A_sound = loadAudio("./resources/A3.mp3");
+var C_sound = loadAudio("./resources/C3.mp3");
+var G_sound = loadAudio("./resources/G3.mp3");
+var T_sound = loadAudio("./resources/E3.mp3");
+var a_sound = loadAudio("./resources/A3.mp3");
+var c_sound = loadAudio("./resources/C3.mp3");
+var g_sound = loadAudio("./resources/G3.mp3");
+var t_sound = loadAudio("./resources/E3.mp3");
 
 var DNA = [];
+var currDNAindex = 0;
 var numActiveDNA = 7;
 var DNAlength = 0;
 var DNAhalflength = 0;
-var tempo = 100;
+var tempo = 1000;
 
 var valid_chars = ['A','C','G','T','a','c','g','t','\n','\r'];
 
@@ -29,7 +30,7 @@ function loadAudio(uri)
 function isAppLoaded()
 {
     filesLoaded++;
-    if (filesLoaded >= filesToLoad) main();
+    //if (filesLoaded >= filesToLoad) main();
 }
 
 function loadDNA() {
@@ -60,7 +61,7 @@ function loadDNA() {
 		DNAlength = DNA.length;
 		alert(dna);
 		setInitDNA();
-		playDNA();
+		playDNA(0);
 	}
 	else {
 		resetDNA();
@@ -79,33 +80,64 @@ function setInitDNA() {
 	}
 }
 
-function playDNA() {
+function shiftDNA() {
+	var i;
+	for (i = 0; i < numActiveDNA-1; i++) {
+		var slot = '#DNA' + i;
+		var j = i+1;
+		var next_slot = '#DNA' + j;
+		$(slot).text($(next_slot).text());
+	}
+	i = numActiveDNA-1;
+	var slot = '#DNA' + i;
+	var next = currDNAindex+DNAhalflength+1;
+	if (next < DNAlength) {
+		$(slot).text(DNA[next]);
+	}
+	else {
+		$(slot).text('.');
+	}
+	currDNAindex++;
+}
+
+function playDNA(index) {
 	var c = '';
-	for (var i = 0; i < DNA.length; i++) {
-		c = DNA[i];
-		switch(c) {
-			case 'A':
-				break;
-			case 'C':
-				break;
-			case 'G':
-				break;
-			case 'T':
-				break;
-			case 'a':
-				break;
-			case 'c':
-				break;
-			case 'g':
-				break;
-			case 't':
-				break;
-			default:
-				continue;
-		}
+	var audio;
+	c = DNA[index];
+	switch(c) {
+		case 'A':
+			audio = A_sound;
+			break;
+		case 'C':
+			audio = C_sound;
+			break;
+		case 'G':
+			audio = G_sound;
+			break;
+		case 'T':
+			audio = T_sound;
+			break;
+		case 'a':
+			audio = a_sound;
+			break;
+		case 'c':
+			audio = c_sound;
+			break;
+		case 'g':
+			audio = g_sound;
+			break;
+		case 't':
+			audio = t_sound;
+			break;
+		default:
 	}
 	setTimeout(function() {
-		
+		audio.play();
+		shiftDNA();
+		index++;
+		if (index < DNAlength) {
+			playDNA(index);
+		}
 	},tempo);
 }
 
