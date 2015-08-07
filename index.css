@@ -1,3 +1,7 @@
+@font-face {
+	font-family: Moon;
+	src: url('Moon Light.otf');
+}
 body {
 	background: #24f89a;
 }
@@ -36,7 +40,7 @@ body {
 	height:30px;
 	bottom:20px;
 	margin-left:12.5px;
-	background: #eee;
+	/*background: #eee;*/
 }
 
 .DNA-val {
@@ -44,8 +48,31 @@ body {
 	height:30px;
 	width:50px;
 	text-align:center;
-	line-height:1.7;
-	font-family: Verdana;
+	font-family: Moon;
+	font-size: small;
+	color: #333;
 }
-#DNAp3 {
+#DNA0 {
+	font-size: x-small;
+}
+#DNA1 {
+	font-size: small;
+}
+#DNA2 {
+	font-size: medium;
+}
+#DNA3 {
+	font-size: larger;
+	color: white;
+	font-weight:bold;
+	//background: rgba(255,255,255,0.75);
+}
+#DNA4 {
+	font-size: medium;
+}
+#DNA5 {
+	font-size: small;
+}
+#DNA6 {
+	font-size: x-small;
 }

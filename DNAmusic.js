@@ -8,6 +8,10 @@ var g_sound = loadAudio("g_sound.uri");
 var t_sound = loadAudio("t_sound.uri");*/
 
 var DNA = [];
+var numActiveDNA = 7;
+var DNAlength = 0;
+var DNAhalflength = 0;
+var tempo = 100;
 
 var valid_chars = ['A','C','G','T','a','c','g','t','\n','\r'];
 
@@ -32,6 +36,7 @@ function loadDNA() {
 	var isValidChar = false;
 	var isValidDNA = true;
 	var dna = document.getElementById("DNA-input-area").value;
+	dna = dna.replace(/(?:\r\n|\r|\n)/g, '');
 	
 	var c = '';
 	for (var i = 0; i < dna.length; i++) {
@@ -52,11 +57,25 @@ function loadDNA() {
 	}
 	
 	if (isValidDNA) {
+		DNAlength = DNA.length;
 		alert(dna);
+		setInitDNA();
 		playDNA();
 	}
 	else {
 		resetDNA();
+	}
+}
+
+function setInitDNA() {
+	DNAhalflength = Math.floor(numActiveDNA/2);
+	for (var i = 0; i < DNAhalflength; i++) {
+		var slot = '#DNA' + i;
+		$(slot).text('.');
+	}
+	for (var i = DNAhalflength, j = 0; i < numActiveDNA; i++, j++) {
+		var slot = '#DNA' + i;
+		$(slot).text(DNA[j]);
 	}
 }
 
@@ -85,6 +104,9 @@ function playDNA() {
 				continue;
 		}
 	}
+	setTimeout(function() {
+		
+	},tempo);
 }
 
 function resetDNA() {
