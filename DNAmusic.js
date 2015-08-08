@@ -1,29 +1,70 @@
-var A_sound = loadAudio("./resources/A3.mp3");
-var C_sound = loadAudio("./resources/C3.mp3");
-var G_sound = loadAudio("./resources/G3.mp3");
-var T_sound = loadAudio("./resources/E3.mp3");
-var a_sound = loadAudio("./resources/A3.mp3");
-var c_sound = loadAudio("./resources/C3.mp3");
-var g_sound = loadAudio("./resources/G3.mp3");
-var t_sound = loadAudio("./resources/E3.mp3");
+var A_sound;
+var C_sound;
+var G_sound;
+var T_sound;
+var a_sound;
+var c_sound;
+var g_sound;
+var t_sound;
+var r_A_sound;
+var r_C_sound;
+var r_G_sound;
+var r_T_sound;
+var r_a_sound;
+var r_c_sound;
+var r_g_sound;
+var r_t_sound;
 
 var DNA = [];
+var rDNA = [];
+
 var currDNAindex = 0;
 var numActiveDNA = 7;
 var DNAlength = 0;
 var DNAhalflength = 0;
-var tempo = 500;
+
+var beats = 4;
+var tempo = 200;
+var u_tempo = 200;
+var l_tempo = 100;
+
+var prev_note = '';
 
 var valid_chars = ['A','C','G','T','a','c','g','t','\n','\r'];
+var oppos_chars = ['G','T','A','C','g','t','a','c'];
 
 filesToLoad = 2;
 filesLoaded = 0;
+
+preloadSounds();
+
+function preloadSounds() {
+	A_sound = loadAudio("./resources/primary/A3.mp3");
+	C_sound = loadAudio("./resources/primary/C3.mp3");
+	G_sound = loadAudio("./resources/primary/G3.mp3");
+	T_sound = loadAudio("./resources/primary/E3.mp3");
+	a_sound = loadAudio("./resources/primary/A3.mp3");
+	c_sound = loadAudio("./resources/primary/C3.mp3");
+	g_sound = loadAudio("./resources/primary/G3.mp3");
+	t_sound = loadAudio("./resources/primary/E3.mp3");
+	
+	r_A_sound = loadAudio("./resources/secondary/A3.mp3");
+	r_C_sound = loadAudio("./resources/secondary/A5.mp3");
+	r_G_sound = loadAudio("./resources/secondary/A6.mp3");
+	r_T_sound = loadAudio("./resources/secondary/A7.mp3");
+	r_a_sound = loadAudio("./resources/secondary/A3.mp3");
+	r_c_sound = loadAudio("./resources/secondary/A5.mp3");
+	r_g_sound = loadAudio("./resources/secondary/A6.mp3");
+	r_t_sound = loadAudio("./resources/secondary/A7.mp3");
+}
 
 function loadAudio(uri) 
 {
     var audio = new Audio();
     audio.addEventListener('canplaythrough', isAppLoaded, false); 
+	audio.preload = 'auto';
     audio.src = uri;
+	audio.load();
     return audio;
 }
 
@@ -40,12 +81,19 @@ function loadDNA() {
 	dna = dna.replace(/(?:\r\n|\r|\n)/g, '');
 	
 	var c = '';
-	for (var i = 0; i < dna.length; i++) {
+	for (var i = 0,k = 0; i < dna.length; i++, k++) {
 		c = dna.charAt(i);
 		for (var j = 0; j < valid_chars.length; j++) {
 			if (valid_chars[j] == c) {
 				DNA[i] = c;
 				isValidChar = true;
+				if (k % beats == 0) {
+					k = 0;
+					rDNA[i] = oppos_chars[j];
+				}
+				else {
+					rDNA[i] = '';
+				}
 				break;
 			}
 		}
@@ -59,7 +107,7 @@ function loadDNA() {
 	
 	if (isValidDNA) {
 		DNAlength = DNA.length;
-		alert(dna);
+		alert(rDNA);
 		setInitDNA();
 		playDNA(0);
 	}
@@ -101,46 +149,130 @@ function shiftDNA() {
 }
 
 function playDNA(index) {
+	var isPlayNote = true;
 	var c = '';
 	var audio;
 	c = DNA[index];
 	switch(c) {
 		case 'A':
 			audio = A_sound;
+			tempo = u_tempo;
+			if (prev_note == c) isPlayNote = false;
+			else isPlayNote = true;
 			break;
 		case 'C':
 			audio = C_sound;
+			tempo = u_tempo;
+			if (prev_note == c) isPlayNote = false;
+			else isPlayNote = true;
 			break;
 		case 'G':
 			audio = G_sound;
+			tempo = u_tempo;
+			if (prev_note == c) isPlayNote = false;
+			else isPlayNote = true;
 			break;
 		case 'T':
 			audio = T_sound;
+			tempo = u_tempo;
+			if (prev_note == c) isPlayNote = false;
+			else isPlayNote = true;
 			break;
 		case 'a':
 			audio = a_sound;
+			tempo = l_tempo;
+			isPlayNote = true;
 			break;
 		case 'c':
 			audio = c_sound;
+			tempo = l_tempo;
+			isPlayNote = true;
 			break;
 		case 'g':
 			audio = g_sound;
+			tempo = l_tempo;
+			isPlayNote = true;
 			break;
 		case 't':
 			audio = t_sound;
+			tempo = l_tempo;
+			isPlayNote = true;
 			break;
 		default:
 	}
+	
+	var b = '';
+	var r_audio;
+	var isPlayBeat = false;
+	if (index % beats == 0) {
+		isPlayBeat = true;
+		b = rDNA[index];
+		switch(b) {
+			case 'A':
+				r_audio = r_A_sound;
+				tempo = u_tempo;
+				break;
+			case 'C':
+				r_audio = r_C_sound;
+				tempo = u_tempo;
+				break;
+			case 'G':
+				r_audio = r_G_sound;
+				tempo = u_tempo;
+				break;
+			case 'T':
+				r_audio = r_T_sound;
+				tempo = u_tempo;
+				break;
+			case 'a':
+				r_audio = r_a_sound;
+				tempo = l_tempo;
+				break;
+			case 'c':
+				r_audio = r_c_sound;
+				tempo = l_tempo;
+				break;
+			case 'g':
+				r_audio = r_g_sound;
+				tempo = l_tempo;
+				break;
+			case 't':
+				r_audio = r_t_sound;
+				tempo = l_tempo;
+				break;
+			default:
+		}
+	}
+	
+	if (isPlayNote) { 
+		playSound(audio);
+	}
+	if (isPlayBeat) {
+		playSound(r_audio);
+		isPlayBeat = false;
+	}
+	
 	setTimeout(function() {
-		audio.play();
+		//audio.play();
 		shiftDNA();
 		index++;
+		prev_note = c;
 		if (index < DNAlength) {
 			playDNA(index);
+		}
+		else {
+			resetDNA();
 		}
 	},tempo);
 }
 
 function resetDNA() {
 	DNA = [];
+	rDNA = [];
+	currDNAindex = 0;
+}
+
+function playSound(audio){
+	var click = audio.cloneNode();
+	click.play();   
 }
