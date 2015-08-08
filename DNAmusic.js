@@ -27,6 +27,8 @@ var beats = 4;
 var tempo = 200;
 var u_tempo = 200;
 var l_tempo = 100;
+var volume;
+var r_volume;
 
 var prev_note = '';
 
