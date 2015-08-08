@@ -10,10 +10,18 @@
 		<button id="DNA-load-button" onclick="loadDNA()">SUBMIT</button>
 		
 		<div id="primary-instrument-container">
-			<div class="instrument" id="primary1"></div>
-			<div class="instrument" id="primary2"></div>
-			<div class="instrument" id="primary3"></div>
-			<div class="instrument" id="primary4"></div>
+			<div class="instrument" id="primary1">
+				<div id="u0" class="underline"></div>
+			</div>
+			<div class="instrument" id="primary2">
+				<div id="u1" class="underline"></div>
+			</div>
+			<div class="instrument" id="primary3">
+				<div id="u2" class="underline"></div>
+			</div>
+			<div class="instrument" id="primary4">
+				<div id="u3" class="underline"></div>
+			</div>
 		</div>
 		<div id="DNA-slider">
 			<div id="DNA0" class="DNA-val">A</div>
@@ -25,16 +33,28 @@
 			<div id="DNA6" class="DNA-val">t</div>
 		</div>
 		<div id="secondary-instrument-container">
-			<div class="instrument" id="secondary1"></div>
-			<div class="instrument" id="secondary2"></div>
-			<div class="instrument" id="secondary3"></div>
-			<div class="instrument" id="secondary4"></div>
+			<div class="instrument" id="secondary1">
+				<div id="u4" class="underline"></div>
+			</div>
+			<div class="instrument" id="secondary2">
+				<div id="u5" class="underline"></div>
+			</div>
+			<div class="instrument" id="secondary3">
+				<div id="u6" class="underline"></div>
+			</div>
+			<div class="instrument" id="secondary4">
+				<div id="u7" class="underline"></div>
+			</div>
 		</div>
 	</div>
 	
+	<canvas data-processing-sources="anything.pde"></canvas>
+	
 	<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
 	<script type="text/javascript" src="http://requirejs.org/docs/release/2.1.11/minified/require.js"></script>
+	<script type="text/javascript" src="processing.js"></script>
 	<script type="text/javascript" src="DNAmusic.js"></script>
+	<script type="text/javasctipt" src="viz.js"></script>
 </body>
 
 </html>

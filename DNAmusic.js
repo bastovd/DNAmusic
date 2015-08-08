@@ -25,8 +25,8 @@ var DNAhalflength = 0;
 
 var beats = 4;
 var tempo = 200;
-var u_tempo = 200;
-var l_tempo = 100;
+var u_tempo = 300;
+var l_tempo = 200;
 var volume;
 var r_volume;
 
@@ -38,7 +38,27 @@ var oppos_chars = ['G','T','A','C','g','t','a','c'];
 filesToLoad = 2;
 filesLoaded = 0;
 
-preloadSounds();
+main();
+
+function main() {
+	var instruments = document.getElementsByClassName("instrument");
+	for (var i = 0; i < instruments.length; i++) {
+		$("#"+instruments[i].id)
+		.hover(function() {
+			$(this)
+			.css("border","2px solid #eee");
+		})
+		.click(function() {
+			setInstrumentSounds(i);
+		});
+	}
+	for (var i = 0; i < instruments.length; i++) {
+		$("#"+instruments[i].id).mouseleave(function() {
+			$(this).css("border","none");
+		});
+	}
+	preloadSounds();
+}
 
 function preloadSounds() {
 	A_sound = loadAudio("./resources/primary/A3.mp3");
@@ -68,6 +88,29 @@ function loadAudio(uri)
     audio.src = uri;
 	audio.load();
     return audio;
+}
+
+function setInstrumentSounds(index) {
+	if (index < 4) {
+		A_sound = loadAudio("./resources/primary/"+index+"/A3.mp3");
+		C_sound = loadAudio("./resources/primary/"+index+"/C3.mp3");
+		G_sound = loadAudio("./resources/primary/"+index+"/G3.mp3");
+		T_sound = loadAudio("./resources/primary/"+index+"/E3.mp3");
+		a_sound = loadAudio("./resources/primary/"+index+"/A3.mp3");
+		c_sound = loadAudio("./resources/primary/"+index+"/C3.mp3");
+		g_sound = loadAudio("./resources/primary/"+index+"/G3.mp3");
+		t_sound = loadAudio("./resources/primary/"+index+"/E3.mp3");
+	}
+	else {
+		r_A_sound = loadAudio("./resources/primary/"+index+"/A3.mp3");
+		r_C_sound = loadAudio("./resources/primary/"+index+"/C3.mp3");
+		r_G_sound = loadAudio("./resources/primary/"+index+"/G3.mp3");
+		r_T_sound = loadAudio("./resources/primary/"+index+"/E3.mp3");
+		r_a_sound = loadAudio("./resources/primary/"+index+"/A3.mp3");
+		r_c_sound = loadAudio("./resources/primary/"+index+"/C3.mp3");
+		r_g_sound = loadAudio("./resources/primary/"+index+"/G3.mp3");
+		r_t_sound = loadAudio("./resources/primary/"+index+"/E3.mp3");
+	}
 }
 
 function isAppLoaded()
