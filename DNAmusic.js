@@ -35,6 +35,11 @@ var prev_note = '';
 var valid_chars = ['A','C','G','T','a','c','g','t','\n','\r'];
 var oppos_chars = ['G','T','A','C','g','t','a','c'];
 
+var colors = [];
+
+var isAddParticle;
+var isParticlesInit = false;
+
 filesToLoad = 2;
 filesLoaded = 0;
 
@@ -57,7 +62,19 @@ function main() {
 			$(this).css("border","none");
 		});
 	}
+	generateColors();
 	preloadSounds();
+}
+
+function generateColors() {
+	var color1 = Math.floor(Math.random()*16777215);
+	colors[0] = '#'+color1.toString(16);
+	var color2 = Math.floor(Math.random()*16777215);
+	colors[1] = '#'+color2.toString(16);
+	var color3 = Math.floor(Math.random()*16777215);
+	colors[2] = '#'+color3.toString(16);
+	var color4 = Math.floor(Math.random()*16777215);
+	colors[3] = '#'+color4.toString(16);
 }
 
 function preloadSounds() {
@@ -152,6 +169,7 @@ function loadDNA() {
 	
 	if (isValidDNA) {
 		DNAlength = DNA.length;
+		isParticlesInit = true;
 		alert(rDNA);
 		setInitDNA();
 		playDNA(0);
@@ -296,6 +314,8 @@ function playDNA(index) {
 		playSound(r_audio);
 		isPlayBeat = false;
 	}
+	
+	isAddParticle = true;
 	
 	setTimeout(function() {
 		//audio.play();
