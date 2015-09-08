@@ -55,8 +55,27 @@
 	<script type="text/javasctipt" src="viz.js"></script>
 	<script src="processing.js"></script>
 	
+	<div>
 	<!--VISUALIZATION-->
-	<script type="text/processing" data-processing-target="canvas">
+	<script type="application/processing">
+/* @pjs preload="resources/images/w_brush_1.png,
+			 resources/images/w_brush_2.png,
+			 resources/images/w_brush_3.png,
+			 resources/images/g_brush_1.png,
+			 resources/images/g_brush_2.png,
+			 resources/images/g_brush_3.png,
+			 resources/images/b_brush_1.png,
+			 resources/images/b_brush_2.png,
+			 resources/images/b_brush_3.png,
+			 resources/images/b_r_brush_1.png,
+			 resources/images/b_r_brush_2.png,
+			 resources/images/b_r_brush_3.png,
+			 resources/images/b_g_brush_1.png,
+			 resources/images/b_g_brush_2.png,
+			 resources/images/b_g_brush_3.png,
+			 resources/images/b_b_brush_1.png,
+			 resources/images/b_b_brush_2.png,
+			 resources/images/b_b_brush_3.png"; */
 // Global variables
 float radius = 50.0;
 int X, Y;
@@ -64,7 +83,7 @@ int nX, nY;
 int delay = 16;
 int r,g,b;
 
-float color_line = 0.0;
+int color_line = 1; // if ACGT or acgt
 
 string p_color;
 
@@ -73,29 +92,32 @@ int particleIndex = 0;
 Particle[] particles;
 ArrayList particle_subsets; // subsets of particle clusters
 ArrayList particle_subset_steps; // points along a curve
-int curr_particle_subset_index;
+int curr_particle_subset_index; // curr subset to count from
+int placed_particles; // particles already rendered in place
 Curve[] curves;
 PImage[] brushes;
+PImage[] b_brushes;
 int num_brushes = 9;
 
-/* @pjs preload="resources/images/w_brush_1.png"; */
 Pimage brush_1;
-/* @pjs preload="resources/images/w_brush_2.png"; */
 Pimage brush_2;
-/* @pjs preload="resources/images/w_brush_3.png"; */
 Pimage brush_3;
-/* @pjs preload="resources/images/g_brush_1.png"; */
 Pimage brush_4;
-/* @pjs preload="resources/images/g_brush_2.png"; */
 Pimage brush_5;
-/* @pjs preload="resources/images/g_brush_3.png"; */
 Pimage brush_6;
-/* @pjs preload="resources/images/b_brush_1.png"; */
 Pimage brush_7;
-/* @pjs preload="resources/images/b_brush_2.png"; */
 Pimage brush_8;
-/* @pjs preload="resources/images/b_brush_3.png"; */
 Pimage brush_9;
+
+Pimage b_brush_1;
+Pimage b_brush_2;
+Pimage b_brush_3;
+Pimage b_brush_4;
+Pimage b_brush_5;
+Pimage b_brush_6;
+Pimage b_brush_7;
+Pimage b_brush_8;
+Pimage b_brush_9;
 
 
 // Setup the Processing Canvas
@@ -128,6 +150,26 @@ void setup(){
   brushes[6] = brush_7;
   brushes[7] = brush_8;
   brushes[8] = brush_9;
+  // setting brush strokes textures;
+  b_brush_1 = loadImage("resources/images/b_r_brush_1.png");
+  b_brush_2 = loadImage("resources/images/b_r_brush_2.png");
+  b_brush_3 = loadImage("resources/images/b_r_brush_3.png");
+  b_brush_4 = loadImage("resources/images/b_g_brush_1.png");
+  b_brush_5 = loadImage("resources/images/b_g_brush_2.png");
+  b_brush_6 = loadImage("resources/images/b_g_brush_3.png");
+  b_brush_7 = loadImage("resources/images/b_b_brush_1.png");
+  b_brush_8 = loadImage("resources/images/b_b_brush_2.png");
+  b_brush_9 = loadImage("resources/images/b_b_brush_3.png");
+  b_brushes = new PImage[num_brushes];
+  b_brushes[0] = b_brush_1;
+  b_brushes[1] = b_brush_2;
+  b_brushes[2] = b_brush_3;
+  b_brushes[3] = b_brush_4;
+  b_brushes[4] = b_brush_5;
+  b_brushes[5] = b_brush_6;
+  b_brushes[6] = b_brush_7;
+  b_brushes[7] = b_brush_8;
+  b_brushes[8] = b_brush_9;
   
   particle_subsets = new ArrayList(10);
   
@@ -151,6 +193,7 @@ void setParticleSubSets() {
 		i += sub;
 	}
 	curr_particle_subset_index = 0;
+	placed_particles = 0;
 }
 
 void setParticlesLength() {
@@ -170,12 +213,22 @@ void addParticle(int i) {
 		sr = 0; sg = 0; sb = 255;
 	}
 	
+	if (c == "A" || c == "C" || c == "G" || c == "T") color_line = 1;
+	else color_line = 0;
+	
 	radius = random(15.0,25.0);
-	X = random (screen.width);
-	Y = random (screen.height);
-	color_line = random(255);
+	X = particle_subset_steps.get(placed_particles).x;//random (screen.width);
+	Y = particle_subset_steps.get(placed_particles).y;//random (screen.height);
 	particles[i] = new Particle(X, Y, radius, sr, sg, sb, color_line);
+	
 	particleIndex++;
+	placed_particles++;
+	if (placed_particles > particle_subsets.get(curr_particle_subset_index)) {
+		curr_particle_subset_index++;
+		placed_particles = 0;
+		generateCurve();
+		particleStepsOnCurve(curves[0]);
+	}
 	
 	isAddParticle = false;
 }
@@ -209,6 +262,7 @@ void generateParticles() {
 				  particles[i].i_radius, 
 				  particles[i].i_radius);
 			popMatrix();
+			
 			particles[i].update();
 		}
 	}
@@ -226,11 +280,11 @@ void particleStepsOnCurve(Curve c) {
 	Pt p;// = new Point(0,0);
 	float radius;
 	float angle;
-	float rate = random (0.0, 1.0);
+	float rate = random (0.25, 2.0);
 	if (rate == 0.0) rate = 0.1;
 	particle_subset_steps = new ArrayList(steps);
 	for (int i = 0; i <= steps; i++) {
-	  radius = random(0.0, i*rate);
+	  radius = random(10.0, 10+i*rate);
 	  angle = random(0.0, TWO_PI);
 	  float t = i / float(steps);
 	  float x = bezierPoint(c.i_x, c.ci_x, c.cj_x, c.j_x, t);
@@ -256,7 +310,7 @@ void drawStepsOnCurve() {
 
 void drawCurve() {
 	noFill();
-	stroke(0,0,0);
+	stroke(0,0,0,126);
 	bezier(curves[0].i_x,
 		   curves[0].i_y,
 		   curves[0].ci_x,
@@ -293,15 +347,12 @@ boolean isAddCurve = true;
 // Main draw loop
 void draw(){ 
   // Fill canvas grey
-  background( 75 );
-	/*rect(100,100,100,100);
-	rotate(0.1);
-	rect(100,100,100,100);
-	rotate(-0.1);
-	rect(500,500,100,100);
-	rotate(0.1);
-	rect(500,500,100,100);
-	rotate(-0.1);*/
+  background( 20 );
+  image(brush_1,0,0);
+  tint(255,126);
+  image(brush_1,100,0);
+
+  
   generateParticles();
   drawCurve();
   drawStepsOnCurve();
@@ -342,7 +393,7 @@ class Particle {
 	float i_radius;
 	float t_radius;
 	int r, g, b;
-	float cline;
+	int cline;
 	
 	float bounce_acc;
 	float m_radius;
@@ -359,14 +410,20 @@ class Particle {
 		b = cb;
 		cline = cl;
 		
-		t_radius = random(50.0,100.0);
 		m_radius = i_radius;
 		bounce_acc = random(0.5,1.0);
 		
 		int j = int(random(0,3));
 		if (cb == 255) j+=6;
 		else if (cg == 255) j+=3;
-		texture = brushes[j];
+		if (cl == 0) {
+			texture = brushes[j];
+			t_radius = random(25.0,50.0);
+		}
+		else {
+			t_radius = random(75.0,150.0);
+			texture = b_brushes[j];
+		}
 		
 		rot = random(0.0,TWO_PI);
 	}
@@ -405,6 +462,7 @@ class Brush {
 
 	</script>
 	<canvas id="canvas"></canvas>
+	</div>
 
 </body>
 
