@@ -19380,9 +19380,8 @@ module.exports = function setupParser(Processing, options) {
           curContext.drawImage(htmlElement, 0, 0,
             htmlElement.width, htmlElement.height, bounds.x, bounds.y, bounds.w, bounds.h);
         } else {
-		console.log(img);
           var obj = img.toImageData();
-		console.log(obj);
+
           // Tint the image
           if (curTint !== null) {
             curTint(obj);
@@ -19451,11 +19450,9 @@ module.exports = function setupParser(Processing, options) {
       var g = p.green(tintColor) / colorModeY;
       var b = p.blue(tintColor) / colorModeZ;
       var a = p.alpha(tintColor) / colorModeA;
-	console.log(r + " " + g + " " + b + " " + a);
       curTint = function(obj) {
         var data = obj.data,
             length = 4 * obj.width * obj.height;
-	console.log(obj.attributes + " " + length);
         for (var i = 0; i < length;) {
           data[i++] *= r;
           data[i++] *= g;

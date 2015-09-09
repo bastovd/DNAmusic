@@ -53,29 +53,29 @@
 	<script type="text/javascript" src="processing.min.js"></script>
 	<script type="text/javascript" src="DNAmusic.js"></script>
 	<script type="text/javasctipt" src="viz.js"></script>
-	<script src="processing.js"></script>
+	<!--<script src="processing.js"></script>-->
 	
 	<div>
 	<!--VISUALIZATION-->
 	<script type="application/processing">
-/* @pjs preload="resources/images/w_brush_1.png,
-			 resources/images/w_brush_2.png,
-			 resources/images/w_brush_3.png,
-			 resources/images/g_brush_1.png,
-			 resources/images/g_brush_2.png,
-			 resources/images/g_brush_3.png,
-			 resources/images/b_brush_1.png,
-			 resources/images/b_brush_2.png,
-			 resources/images/b_brush_3.png,
-			 resources/images/b_r_brush_1.png,
-			 resources/images/b_r_brush_2.png,
-			 resources/images/b_r_brush_3.png,
-			 resources/images/b_g_brush_1.png,
-			 resources/images/b_g_brush_2.png,
-			 resources/images/b_g_brush_3.png,
-			 resources/images/b_b_brush_1.png,
-			 resources/images/b_b_brush_2.png,
-			 resources/images/b_b_brush_3.png"; */
+/* @pjs preload="https://raw.githubusercontent.com/bastovd/DNAmusic/master/resources/images/w_brush_1.png,
+			 https://raw.githubusercontent.com/bastovd/DNAmusic/master/resources/images/w_brush_2.png,
+			 https://raw.githubusercontent.com/bastovd/DNAmusic/master/resources/images/w_brush_3.png,
+			 https://raw.githubusercontent.com/bastovd/DNAmusic/master/resources/images/g_brush_1.png,
+			 https://raw.githubusercontent.com/bastovd/DNAmusic/master/resources/images/g_brush_2.png,
+			 https://raw.githubusercontent.com/bastovd/DNAmusic/master/resources/images/g_brush_3.png,
+			 https://raw.githubusercontent.com/bastovd/DNAmusic/master/resources/images/b_brush_1.png,
+			 https://raw.githubusercontent.com/bastovd/DNAmusic/master/resources/images/b_brush_2.png,
+			 https://raw.githubusercontent.com/bastovd/DNAmusic/master/resources/images/b_brush_3.png,
+			 https://raw.githubusercontent.com/bastovd/DNAmusic/master/resources/images/b_r_brush_1.png,
+			 https://raw.githubusercontent.com/bastovd/DNAmusic/master/resources/images/b_r_brush_2.png,
+			 https://raw.githubusercontent.com/bastovd/DNAmusic/master/resources/images/b_r_brush_3.png,
+			 https://raw.githubusercontent.com/bastovd/DNAmusic/master/resources/images/b_g_brush_1.png,
+			 https://raw.githubusercontent.com/bastovd/DNAmusic/master/resources/images/b_g_brush_2.png,
+			 https://raw.githubusercontent.com/bastovd/DNAmusic/master/resources/images/b_g_brush_3.png,
+			 https://raw.githubusercontent.com/bastovd/DNAmusic/master/resources/images/b_b_brush_1.png,
+			 https://raw.githubusercontent.com/bastovd/DNAmusic/master/resources/images/b_b_brush_2.png,
+			 https://raw.githubusercontent.com/bastovd/DNAmusic/master/resources/images/b_b_brush_3.png"; */
 // Global variables
 float radius = 50.0;
 int X, Y;
@@ -131,15 +131,15 @@ void setup(){
   nY = Y;
   
   // setting brush strokes textures;
-  brush_1 = loadImage("resources/images/w_brush_1.png");
-  brush_2 = loadImage("resources/images/w_brush_2.png");
-  brush_3 = loadImage("resources/images/w_brush_3.png");
-  brush_4 = loadImage("resources/images/g_brush_1.png");
-  brush_5 = loadImage("resources/images/g_brush_2.png");
-  brush_6 = loadImage("resources/images/g_brush_3.png");
-  brush_7 = loadImage("resources/images/b_brush_1.png");
-  brush_8 = loadImage("resources/images/b_brush_2.png");
-  brush_9 = loadImage("resources/images/b_brush_3.png");
+  brush_1 = loadImage("https://raw.githubusercontent.com/bastovd/DNAmusic/master/resources/images/w_brush_1.png");
+  brush_2 = loadImage("https://raw.githubusercontent.com/bastovd/DNAmusic/master/resources/images/w_brush_2.png");
+  brush_3 = loadImage("https://raw.githubusercontent.com/bastovd/DNAmusic/master/resources/images/w_brush_3.png");
+  brush_4 = loadImage("https://raw.githubusercontent.com/bastovd/DNAmusic/master/resources/images/g_brush_1.png");
+  brush_5 = loadImage("https://raw.githubusercontent.com/bastovd/DNAmusic/master/resources/images/g_brush_2.png");
+  brush_6 = loadImage("https://raw.githubusercontent.com/bastovd/DNAmusic/master/resources/images/g_brush_3.png");
+  brush_7 = loadImage("https://raw.githubusercontent.com/bastovd/DNAmusic/master/resources/images/b_brush_1.png");
+  brush_8 = loadImage("https://raw.githubusercontent.com/bastovd/DNAmusic/master/resources/images/b_brush_2.png");
+  brush_9 = loadImage("https://raw.githubusercontent.com/bastovd/DNAmusic/master/resources/images/b_brush_3.png");
   brushes = new PImage[num_brushes];
   brushes[0] = brush_1;
   brushes[1] = brush_2;
@@ -151,15 +151,15 @@ void setup(){
   brushes[7] = brush_8;
   brushes[8] = brush_9;
   // setting brush strokes textures;
-  b_brush_1 = loadImage("resources/images/b_r_brush_1.png");
-  b_brush_2 = loadImage("resources/images/b_r_brush_2.png");
-  b_brush_3 = loadImage("resources/images/b_r_brush_3.png");
-  b_brush_4 = loadImage("resources/images/b_g_brush_1.png");
-  b_brush_5 = loadImage("resources/images/b_g_brush_2.png");
-  b_brush_6 = loadImage("resources/images/b_g_brush_3.png");
-  b_brush_7 = loadImage("resources/images/b_b_brush_1.png");
-  b_brush_8 = loadImage("resources/images/b_b_brush_2.png");
-  b_brush_9 = loadImage("resources/images/b_b_brush_3.png");
+  b_brush_1 = loadImage("https://raw.githubusercontent.com/bastovd/DNAmusic/master/resources/images/b_r_brush_1.png");
+  b_brush_2 = loadImage("https://raw.githubusercontent.com/bastovd/DNAmusic/master/resources/images/b_r_brush_2.png");
+  b_brush_3 = loadImage("https://raw.githubusercontent.com/bastovd/DNAmusic/master/resources/images/b_r_brush_3.png");
+  b_brush_4 = loadImage("https://raw.githubusercontent.com/bastovd/DNAmusic/master/resources/images/b_g_brush_1.png");
+  b_brush_5 = loadImage("https://raw.githubusercontent.com/bastovd/DNAmusic/master/resources/images/b_g_brush_2.png");
+  b_brush_6 = loadImage("https://raw.githubusercontent.com/bastovd/DNAmusic/master/resources/images/b_g_brush_3.png");
+  b_brush_7 = loadImage("https://raw.githubusercontent.com/bastovd/DNAmusic/master/resources/images/b_b_brush_1.png");
+  b_brush_8 = loadImage("https://raw.githubusercontent.com/bastovd/DNAmusic/master/resources/images/b_b_brush_2.png");
+  b_brush_9 = loadImage("https://raw.githubusercontent.com/bastovd/DNAmusic/master/resources/images/b_b_brush_3.png");
   b_brushes = new PImage[num_brushes];
   b_brushes[0] = b_brush_1;
   b_brushes[1] = b_brush_2;
@@ -261,6 +261,7 @@ void generateParticles() {
 				  0 - particles[i].i_radius/2, 
 				  particles[i].i_radius, 
 				  particles[i].i_radius);
+				  //filter(BLUR, 6);
 			popMatrix();
 			
 			particles[i].update();
@@ -348,9 +349,9 @@ boolean isAddCurve = true;
 void draw(){ 
   // Fill canvas grey
   background( 20 );
-  image(brush_1,0,0);
-  tint(255,126);
-  image(brush_1,100,0);
+  /*image(brush_1,0,0);
+  tint(255);
+  image(brush_1,100,0);*/
 
   
   generateParticles();
