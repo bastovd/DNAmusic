@@ -306,9 +306,9 @@ boolean isAddCurve = true;
 void draw(){ 
   // Fill canvas grey
   background( 20 );
-  image(brush_1,0,0);
+  /*image(brush_1,0,0);
   tint(255);
-  image(brush_1,100,0);
+  image(brush_1,100,0);*/
 
   
   generateParticles();
