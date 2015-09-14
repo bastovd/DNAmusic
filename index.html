@@ -246,12 +246,12 @@ void generateParticles() {
 	if (numParticles > 0) {
 		for (int i = 0; i < particleIndex; i++) {
 			if (i > 0) {
-				stroke(particles[i].r,particles[i].g,particles[i].b);
+				stroke(particles[i].r,particles[i].g,particles[i].b,126);
 				line(particles[i-1].x_pos,particles[i-1].y_pos,
 					 particles[i].x_pos,particles[i].y_pos);
 			}
-			
 			noStroke();
+			
 			fill (particles[i].r,particles[i].g,particles[i].b);
 			pushMatrix();
 			translate(particles[i].x_pos, particles[i].y_pos);
@@ -419,6 +419,10 @@ class Particle {
 	PImage texture;
 	float rot; // rotation around the z axis;
 	
+	float dist;
+	float theta;
+	float speed;
+	
 	Particle(x,y,ra,cr,cg,cb,cl) {
 		x_pos = x;
 		y_pos = y;
@@ -444,9 +448,23 @@ class Particle {
 		}
 		
 		rot = random(0.0,TWO_PI);
+		
+		//small movement at the beginning
+		theta = random(0.0,TWO_PI);
+		dist = random(0.5,1.0);
+		speed = (0.05,0.1);
+		max_count = random(3,5);
 	}
 	
+	int max_count = 0;
+	int count = 0;
 	void update() {
+		if (count < max_count) {
+			speed += speed;
+			x_pos = x_pos + speed*cos(rot);
+			y_pos = y_pos + speed*sin(rot);
+			count++;
+		}
 	}
 	
 }

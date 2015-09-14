@@ -1,0 +1,20 @@
+<html>
+<script type="text/javascript" src="processing.min.js"></script>
+<script type="application/processing" data-processing-target="mycanvas">
+/* @pjs preload="https://raw.githubusercontent.com/bastovd/DNAmusic/master/resources/images/w_brush_1.png"; */
+PImage img;
+void setup() {
+   img = loadImage("https://raw.githubusercontent.com/bastovd/DNAmusic/master/resources/images/w_brush_1.png", "png");
+   size(screen.width/2, screen.height/2);
+   background(100);
+   //stroke(255);
+   //ellipse(100, 100, 100,100);
+   noTint();
+   image(img, 20, 20);
+   tint(126);
+   text("image", 20, 20);
+   image(img, 200, 20);
+}
+</script>
+<canvas id="mycanvas"></canvas>
+</html>
