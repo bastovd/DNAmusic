@@ -5,10 +5,26 @@
 </head>
 
 <body>
+	<div id="site-title">
+		<p style="margin:0"> DNA music </p>
+		<div id="options">
+			<hr>
+			<p style="color:#888;font-weight:bold">Instruments</p>
+			<p>primary - </p>
+			<p>secondary - </p>
+			<button id="DNA-load-button" onclick="loadDNA()">PLAY</button>
+		</div>
+		<div id="ad-place">
+		</div>
+	</div>
 	<div class="main-container">
-		<textarea id="DNA-input-area">paste DNA sequence</textarea>
-		<button id="DNA-load-button" onclick="loadDNA()">SUBMIT</button>
-		
+		<div id="input">
+		<textarea id="DNA-input-area">PASTE DNA SEQUENCE</textarea>
+		</div>
+		<div id="toggle-view">
+		</div>
+	</div>
+	
 		<div id="primary-instrument-container">
 			<div class="instrument" id="primary1">
 				<div id="u0" class="underline"></div>
@@ -46,7 +62,6 @@
 				<div id="u7" class="underline"></div>
 			</div>
 		</div>
-	</div>
 	
 	<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
 	<script type="text/javascript" src="http://requirejs.org/docs/release/2.1.11/minified/require.js"></script>
@@ -57,31 +72,10 @@
 	<!--<script src="processing.js"></script>-->
 	
 	<div>
-        <script type="application/javascript">
-var transferred_points_x = [];
-var transferred_points_y = [];
-var transferred_points_length = 0;
-var transferred_placed_particles = 0;
-
-function setTransferredXY(x, y, i) {
-//alert("alert");
-        transferred_points_x[i] = x;
-        transferred_points_y[i] = y;
-}
-
-function setTransferredLength(l) {
-        transferred_points_length = l;
-}
-
-function setTransferredPlacedParticles(i) {
-        transferred_placed_particles = i;
-}
-        </script>
 	<!--VISUALIZATION-->
 	<script type="application/processing" data-processing-target="canvas2">
 
 Curve[] curves;
-ArrayList particle_subset_steps; // points along a curve
 
 void setup() {
 	size(screen.width, screen.height, JAVA2D);
@@ -93,136 +87,65 @@ void setup() {
 
 void draw() {
 	background(0,0); // transparent background;
-        //drawCurve();
-        fillParticleSubsetSteps();
-        drawStepsOnCurve();
+	drawCurve();
 }
 
-void fillParticleSubsetSteps() {
-        if (transferred_points_length > 0) {
-                particle_subset_steps = new ArrayList(transferred_points_length);
-                for (int i = 0; i < transferred_points_length; i++) {
-                        particle_subset_steps.add(new PosPoint(transferred_points_x[i],
-                                                               transferred_points_y[i],
-                                                               5.0, i));
-                }
-                setTransferredLength(0);
-                //transferred_points_length = 0;
-        }
+void drawCurve() {
+	noFill();
+	stroke(0,0,0,126);
+	bezier(curves[0].i_x,
+		   curves[0].i_y,
+		   curves[0].ci_x,
+		   curves[0].ci_y,
+		   curves[0].cj_x,
+		   curves[0].cj_y,
+		   curves[0].j_x,
+		   curves[0].j_y);
 }
 
-void drawStepsOnCurve() {
-	if (particle_subset_steps != null) {
-		for (int i = 0; i < particle_subset_steps.size(); i++) {
-			PosPoint p = particle_subset_steps.get(i);
-			noStroke();
-			fill(255,p.alpha);
-			ellipse(p.x,
-					p.y,
-					p.radius,
-					p.radius);
-			if (transferred_placed_particles >= i) {
-				p.SetIsDissolve();
-			}
-			else {
-				if (i > 0 && p.count >= p.to_appear) {
-				PosPoint pp = particle_subset_steps.get(i-1);
-				stroke(210, 25);
-				//strokeWeight(2);
-				line(pp.x, pp.y, p.x, p.y);
-				}
-			}
-			if (p.count == p.to_appear) {
-				p.SetIsAppear();
-			}
-			p.update();
-		}
-	}
-}
-
-class PosPoint {
-	int x;
-	int y;
-	float radius;
-	float bounce_acc;
-	float t_bounce_acc;
-	float i_radius ;
-	float t_radius;
-	
-	float dissolve_acc;
-	int alpha = 0;
-	boolean isDissolve = false;
-	boolean isAppear = false;
-	
-	float speed;
+void generateCurve() {
 	float angle;
+	float length;
+	int xi; int yi;
+	int xj; int yj;
 	
-	int to_appear;
-	int count = 0;
+	angle = random(0.0,TWO_PI);
+	length = random(200.0, 600.0);
+	xi = random (screen.width);
+	yi = random (screen.height);
 	
-	PosPoint(int xi, int yi, float ra, int i) {
-		x = xi;
-		y = yi;
-		to_appear = i;
-		
-		bounce_acc = 0.00025;
-		t_bounce_acc = bounce_acc;
-		dissolve_acc = 5;
-		i_radius = 25.0;
-		t_radius = ra;
-		radius = i_radius;
-		
-		angle = random(0.0,TWO_PI);
-		speed = random(0.0,2.0);
-	}
+	xj = length*cos(angle);
+	yj = length*sin(angle);
 	
-	void SetIsDissolve() {
-		isDissolve = true;
-	}
-	void SetIsAppear() {
-		isAppear = true;
-	}
+	int ci_x = random (screen.width);
+	int ci_y = random (screen.height);
+	int cj_x = random (screen.width);
+	int cj_y = random (screen.height);
 	
-	void update() {
-		if (isDissolve) {
-                
-			x = x+speed*cos(angle);
-			y = y+speed*sin(angle);
-			
-			bounce_acc += bounce_acc;
-			radius += bounce_acc;
-                        
-			alpha -= dissolve_acc;
-                        
-			speed += (speed/50.0);
-			
-			if (radius >= 50) {
-				alpha = 0;
-				isDissolve = false;
-			}
-                        
-		}
-		else {
-			if (isAppear) {
-                                //radius = t_radius; // test, remove after
-				alpha += dissolve_acc;
-				if (alpha > 210) alpha = 210;
-				bounce_acc += 2*bounce_acc;
-				if (radius - bounce_acc <= t_radius) {
-					bounce_acc = t_bounce_acc;
-					radius = t_radius;
-					alpha = 210;
-					isAppear = false;
-					count--;
-				}
-				else {
-					radius -= bounce_acc;
-				}
-			}
-		}
-		count++;
-	}
+	curves[0] = new Curve(xi,yi,xj,yj,ci_x,ci_y,cj_x,cj_y);	
+}
 
+class Curve {
+	int i_x; // pivot 1 x
+	int i_y; // pivot 1 y
+	int j_x; // pivot 2 x
+	int j_y; // pivot 2 y
+	
+	int ci_x; // control 1 x
+	int ci_y; // control 1 y
+	int cj_x; // control 2 x
+	int cj_y; // control 2 y
+	
+	Curve(x1,y1,x2,y2,c1x,c1y,c2x,c2y) {
+		i_x = x1;
+		i_y = y1;
+		j_x = x2;
+		j_y = y2;
+		ci_x = c1x;
+		ci_y = c1y;
+		cj_x = c2x;
+		cj_y = c2y;
+	}
 }
 	</script>
 	
@@ -278,7 +201,7 @@ PImage[] b_brush_colors;
 // Setup the Processing Canvas
 void setup(){
   size( screen.width, screen.height, JAVA2D);
-  background( 20 ); // dark - 20; light - 235 // need to swap circle colors and line colors
+  background( 20 );
   strokeWeight( 0 );
   frameRate( 15 );
   X = 0;
@@ -377,7 +300,7 @@ void generateBrushColors() {
 void setParticleSubSets() {
 	int sub = 0;
 	for (int i = 0; i < numParticles; ) {
-		sub = random(50, 500); // 50, 500 random number of particles in a subset
+		sub = random(50, 500); // random number of particles in a subset
 		i + sub < numParticles ? sub = sub : sub = numParticles - i;
 		particle_subsets.add(sub);
 		i += sub;
@@ -413,11 +336,9 @@ void addParticle(int i) {
 	
 	particleIndex++;
 	placed_particles++;
-        setTransferredPlacedParticles(placed_particles);
 	if (placed_particles > particle_subsets.get(curr_particle_subset_index)) {
 		curr_particle_subset_index++;
 		placed_particles = 0;
-                setTransferredPlacedParticles(0);
 		generateCurve();
 		particleStepsOnCurve(curves[0]);
 	}
@@ -439,7 +360,7 @@ void generateParticles() {
                 int i = 0;
                 if (particleIndex > 0) i = particleIndex-1;
 		for (; i < particleIndex; i++) {
-			if (i > 0 && placed_particles > 1) {
+			if (i > 0) {
 				stroke(particles[i].r,particles[i].g,particles[i].b,126);
 				line(particles[i-1].x_pos,particles[i-1].y_pos,
 					 particles[i].x_pos,particles[i].y_pos);
@@ -489,13 +410,7 @@ void particleStepsOnCurve(Curve c) {
 	  y += radius*sin(angle); 
 	  p = new PosPoint(x,y,5.0,i);
 	  particle_subset_steps.add(p);
-          
-          setTransferredXY(x,y,i);
-          //transferred_point_x[i] = x;
-          //transferred_point_y[i] = y;
-	}
-        setTransferredLength(steps);
-	//transferred_points_length = steps;
+	}	
 }
 
 void drawStepsOnCurve() {

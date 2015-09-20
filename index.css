@@ -1,46 +1,95 @@
 @font-face {
 	font-family: Moon;
-	//src: url('Moon Light.otf');
-        src: url('Aaargh.ttf');
+	src: url('Aaargh.tff');
 }
 body {
 	background: rgb(20,20,20);
 }
 
+#site-title {
+    position: relative;
+    width: 400px;
+    text-align: left;
+    margin: 40px;
+    color: #eee;
+    font-size: 60px;
+    font-family: Moon;
+    left: 600;
+}
+#options {
+	position: absolute;
+    width: 400px;
+    height: 200px;
+    text-align: left;
+	color: #eee;
+	font-size: 15px;
+}
+#ad-place {
+	width:336px;
+	height:280px;
+	background: rgba(0,0,0,0.1);
+	position: absolute;
+	margin-top:200px;
+}
+
 .main-container {
-	position : relative;
-	margin: 0 auto;
-	width:400px;
-	border: none;
-	border-radius: 10px;
-	background: rgba(255,255,255,0.5);
+	position: absolute;
+    width: 600;
+    height: 100%;
+    border: none;
+    margin: 0;
+    padding: 0;
+    left: 0;
+	top: 0;
+    background: rgba(255,255,255,0.1);
+	box-shadow: 5px 0px 5px rgba(0,0,0,0.5);
+}
+
+#input {
+	position: absolute;
+    width: 80%;
+    margin: 5%;
+    height: 80%;
+    border: 2px solid #111;
+}
+#toggle-view {
+	position: absolute;
+	width: 10%;
+	height: 100%;
+	right: 0;
+	background: rgba(0,0,0,0.2);
+	box-shadow: inset 3px 0px 5px rgba(0,0,0,0.5);
 }
 
 #DNA-input-area {
 	width: 100%;
-	height: 200px;
+	height: 100%;
 	padding: 20px;
-	text-align: center;
+	text-align: left;
 	overflow: hidden;
 	resize: none;
+	background: rgba(255,255,255,0.2);
+	color: #eee;
+	border: none;
 }
 
 #DNA-load-button {
-	width : 360px;
-	height : 50px;
-	margin:20px;
-	border: none;
-	border-radius: 10px;
-	background: #333;
-	color: #eee;
+	width: 200px;
+    height: 50px;
+    margin: 0;
+    border: none;
+    /* border-radius: 10px; */
+    background: #222;
+    color: #eee;
+    position: absolute;
 }
 
 #DNA-slider {
-	position: fixed;
+	position: absolute;
 	width:375px;
 	height:30px;
 	bottom:20px;
-	margin-left:12.5px;
+	margin:0 auto;
 	/*background: #eee;*/
 }
 
