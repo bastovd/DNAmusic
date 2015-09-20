@@ -1,9 +1,10 @@
 @font-face {
 	font-family: Moon;
-	src: url('Moon Light.otf');
+	//src: url('Moon Light.otf');
+        src: url('Aaargh.ttf');
 }
 body {
-	background: #24f89a;
+	background: rgb(20,20,20);
 }
 
 .main-container {
@@ -151,6 +152,13 @@ body {
 
 /*-----------Processing----------*/
 #canvas {
+	position:fixed;
+	top:0px;
+	left:0px;
+	z-index:-1;
+}
+
+#canvas2 {
 	position:fixed;
 	top:0px;
 	left:0px;

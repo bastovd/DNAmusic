@@ -27,7 +27,7 @@ var beats = 4;
 var tempo = 200;
 var u_tempo = 300;
 var l_tempo = 200;
-var volume;
+var volume = 0.0;
 var r_volume;
 
 var prev_note = '';
@@ -67,34 +67,58 @@ function main() {
 }
 
 function generateColors() {
-	var color1 = Math.floor(Math.random()*16777215);
-	colors[0] = '#'+color1.toString(16);
-	var color2 = Math.floor(Math.random()*16777215);
-	colors[1] = '#'+color2.toString(16);
-	var color3 = Math.floor(Math.random()*16777215);
-	colors[2] = '#'+color3.toString(16);
-	var color4 = Math.floor(Math.random()*16777215);
-	colors[3] = '#'+color4.toString(16);
+	var color1 = tinycolor.random();
+        /*randomColor({
+           luminosity: 'bright',
+           hue: 'random'
+        });*/
+        
+        var tetrad_colors = tinycolor(color1).splitcomplement();
+        var analogous = tinycolor(color1).analogous();
+        var isLight = tinycolor(analogous[5]).isLight();
+        
+        var variations;
+        
+        for (var i = 0; i < 4; i++) {
+                if (i == 3) {
+                        if (isLight) {
+                            tinycolor(analogous[5]).darken(30);
+                            variations = tinycolor(analogous[5]).analogous(); // creates 6 analogues
+                        }
+                        else {
+                            tinycolor(analogous[5]).lighten(30);
+                            variations = tinycolor(analogous[5]).analogous();
+                        }
+                }
+                else {
+                        //colors[i*7] = tinycolor(tetrad_colors[i]).toRgb();
+                        variations = tinycolor(tetrad_colors[i]).analogous();
+                }
+                
+                for (var j = 0; j < 6; j++) {
+                        colors[i*6+j] = tinycolor(variations[j]).toRgb();
+                }
+        }
 }
 
 function preloadSounds() {
-	A_sound = loadAudio("./resources/primary/A3.mp3");
-	C_sound = loadAudio("./resources/primary/C3.mp3");
-	G_sound = loadAudio("./resources/primary/G3.mp3");
-	T_sound = loadAudio("./resources/primary/E3.mp3");
-	a_sound = loadAudio("./resources/primary/A3.mp3");
-	c_sound = loadAudio("./resources/primary/C3.mp3");
-	g_sound = loadAudio("./resources/primary/G3.mp3");
-	t_sound = loadAudio("./resources/primary/E3.mp3");
+	A_sound = loadAudio("https://raw.githubusercontent.com/bastovd/DNAmusic/master/resources/primary/A3.mp3");
+	C_sound = loadAudio("https://raw.githubusercontent.com/bastovd/DNAmusic/master/resources/primary/C3.mp3");
+	G_sound = loadAudio("https://raw.githubusercontent.com/bastovd/DNAmusic/master/resources/primary/G3.mp3");
+	T_sound = loadAudio("https://raw.githubusercontent.com/bastovd/DNAmusic/master/resources/primary/E3.mp3");
+	a_sound = loadAudio("https://raw.githubusercontent.com/bastovd/DNAmusic/master/resources/primary/A3.mp3");
+	c_sound = loadAudio("https://raw.githubusercontent.com/bastovd/DNAmusic/master/resources/primary/C3.mp3");
+	g_sound = loadAudio("https://raw.githubusercontent.com/bastovd/DNAmusic/master/resources/primary/G3.mp3");
+	t_sound = loadAudio("https://raw.githubusercontent.com/bastovd/DNAmusic/master/resources/primary/E3.mp3");
 	
-	r_A_sound = loadAudio("./resources/secondary/A3.mp3");
-	r_C_sound = loadAudio("./resources/secondary/A5.mp3");
-	r_G_sound = loadAudio("./resources/secondary/A6.mp3");
-	r_T_sound = loadAudio("./resources/secondary/A7.mp3");
-	r_a_sound = loadAudio("./resources/secondary/A3.mp3");
-	r_c_sound = loadAudio("./resources/secondary/A5.mp3");
-	r_g_sound = loadAudio("./resources/secondary/A6.mp3");
-	r_t_sound = loadAudio("./resources/secondary/A7.mp3");
+	r_A_sound = loadAudio("https://raw.githubusercontent.com/bastovd/DNAmusic/master/resources/secondary/A3.mp3");
+	r_C_sound = loadAudio("https://raw.githubusercontent.com/bastovd/DNAmusic/master/resources/secondary/A5.mp3");
+	r_G_sound = loadAudio("https://raw.githubusercontent.com/bastovd/DNAmusic/master/resources/secondary/A6.mp3");
+	r_T_sound = loadAudio("https://raw.githubusercontent.com/bastovd/DNAmusic/master/resources/secondary/A7.mp3");
+	r_a_sound = loadAudio("https://raw.githubusercontent.com/bastovd/DNAmusic/master/resources/secondary/A3.mp3");
+	r_c_sound = loadAudio("https://raw.githubusercontent.com/bastovd/DNAmusic/master/resources/secondary/A5.mp3");
+	r_g_sound = loadAudio("https://raw.githubusercontent.com/bastovd/DNAmusic/master/resources/secondary/A6.mp3");
+	r_t_sound = loadAudio("https://raw.githubusercontent.com/bastovd/DNAmusic/master/resources/secondary/A7.mp3");
 }
 
 function loadAudio(uri) 
@@ -216,49 +240,134 @@ function playDNA(index) {
 	var c = '';
 	var audio;
 	c = DNA[index];
+        if (index == 0) volume = 0.0;
 	switch(c) {
 		case 'A':
 			audio = A_sound;
-			tempo = u_tempo;
-			if (prev_note == c) isPlayNote = false;
+                        if (tempo < u_tempo) {
+                            tempo += 10;
+                        }
+                        
+                        if (prev_note == 'a'||prev_note == 'c' ||prev_note == 't' ||prev_note == 'g') {
+                              volume = 0.5;  
+                        }
+                        
+			//tempo = u_tempo;
+			if (prev_note == c) {isPlayNote = false; 
+                                volume -= 0.05;
+                        }
 			else isPlayNote = true;
 			break;
 		case 'C':
 			audio = C_sound;
-			tempo = u_tempo;
-			if (prev_note == c) isPlayNote = false;
+			if (tempo < u_tempo) {
+                            tempo += 10;
+                        }
+                        
+                        if (prev_note == 'a'||prev_note == 'c' ||prev_note == 't' ||prev_note == 'g') {
+                              volume = 0.5;  
+                        }
+                        
+			//tempo = u_tempo;
+			if (prev_note == c) {isPlayNote = false; 
+                                volume -= 0.05;
+                        }
 			else isPlayNote = true;
 			break;
 		case 'G':
 			audio = G_sound;
-			tempo = u_tempo;
-			if (prev_note == c) isPlayNote = false;
+			if (tempo < u_tempo) {
+                            tempo += 10;
+                        }
+                        
+                        if (prev_note == 'a'||prev_note == 'c' ||prev_note == 't' ||prev_note == 'g') {
+                              volume = 0.5;  
+                        }
+                        
+			//tempo = u_tempo;
+			if (prev_note == c) {isPlayNote = false; 
+                                volume -= 0.05;
+                        }
 			else isPlayNote = true;
 			break;
 		case 'T':
 			audio = T_sound;
-			tempo = u_tempo;
-			if (prev_note == c) isPlayNote = false;
+			if (tempo < u_tempo) {
+                            tempo += 10;
+                        }
+                        
+                        if (prev_note == 'a'||prev_note == 'c' ||prev_note == 't' ||prev_note == 'g') {
+                              volume = 0.5;  
+                        }
+                        
+			//tempo = u_tempo;
+			if (prev_note == c) {isPlayNote = false; 
+                                volume -= 0.05;
+                        }
 			else isPlayNote = true;
 			break;
 		case 'a':
 			audio = a_sound;
-			tempo = l_tempo;
+			if (tempo > l_tempo) {
+                            tempo -= 10;
+                        }
+                        
+                        if (prev_note == 'A'||prev_note == 'C' ||prev_note == 'T' ||prev_note == 'G') {
+                              volume = 0.5;  
+                        }
+                        
+			//tempo = l_tempo;
+                        if (prev_note == c) {isPlayNote = false; 
+                                volume -= 0.15;
+                        }
 			isPlayNote = true;
 			break;
 		case 'c':
 			audio = c_sound;
-			tempo = l_tempo;
+			if (tempo > l_tempo) {
+                            tempo -= 10;
+                        }
+                        
+                        if (prev_note == 'A'||prev_note == 'C' ||prev_note == 'T' ||prev_note == 'G') {
+                              volume = 0.5;  
+                        }
+                        
+			//tempo = l_tempo;
+                        if (prev_note == c) {isPlayNote = false; 
+                                volume -= 0.15;
+                        }
 			isPlayNote = true;
 			break;
 		case 'g':
 			audio = g_sound;
-			tempo = l_tempo;
+			if (tempo > l_tempo) {
+                            tempo -= 10;
+                        }
+                        
+                        if (prev_note == 'A'||prev_note == 'C' ||prev_note == 'T' ||prev_note == 'G') {
+                              volume = 0.5;  
+                        }
+                        
+			//tempo = l_tempo;
+                        if (prev_note == c) {isPlayNote = false; 
+                                volume -= 0.15;
+                        }
 			isPlayNote = true;
 			break;
 		case 't':
 			audio = t_sound;
-			tempo = l_tempo;
+			if (tempo > l_tempo) {
+                            tempo -= 10;
+                        }
+                        
+                        if (prev_note == 'A'||prev_note == 'C' ||prev_note == 'T' ||prev_note == 'G') {
+                              volume = 0.5;  
+                        }
+                        
+			//tempo = l_tempo;
+                        if (prev_note == c) {isPlayNote = false; 
+                                volume -= 0.15;
+                        }
 			isPlayNote = true;
 			break;
 		default:
@@ -308,10 +417,13 @@ function playDNA(index) {
 	}
 	
 	if (isPlayNote) { 
+                if (volume < 1.0) {
+                        volume += 0.1;
+                }
 		playSound(audio);
 	}
 	if (isPlayBeat) {
-		playSound(r_audio);
+		playBeat(r_audio);
 		isPlayBeat = false;
 	}
 	
@@ -338,6 +450,14 @@ function resetDNA() {
 }
 
 function playSound(audio){
+	var click = audio.cloneNode();
+        if (volume > 1.0) volume = 1.0;
+        else if (volume < 0.0) volume = 0.0;
+        click.volume = volume;
+	click.play();   
+}
+
+function playBeat(audio){
 	var click = audio.cloneNode();
 	click.play();   
 }
